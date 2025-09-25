@@ -20,3 +20,15 @@ PaymentFactory::register('pix', function($opts = []) {
     return new PixPayment($pixClient);
 });
 // register tipos pagamento
+
+// registrar observers globais
+// criar subject (pode manter instância em variável global ou injetar em services)
+$inventorySubject = new InventorySubject();
+
+// anexa observers
+$inventorySubject->attach(new LowStockLogObserver());
+$inventorySubject->attach(new LowStockEmailObserver(['chef@restaurante.com','gerente@restaurante.com']));
+$inventorySubject->attach(new LowStockReorderObserver(2.0));
+
+// opcional: guardar no container simples/global para reutilizar
+$GLOBALS['INVENTORY_SUBJECT'] = $inventorySubject;
