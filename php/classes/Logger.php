@@ -30,7 +30,10 @@ class Logger
             $stmt->close();
         } else {
             // fallback para arquivo
-            file_put_contents(__DIR__ . '/../../logs/app.log', "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND);
+            // file_put_contents(__DIR__ . '/../../logs/app.log', "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND);
+
+            $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'app.log';
+            file_put_contents($file, "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
     }
 

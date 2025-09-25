@@ -1,9 +1,9 @@
 <?php
 // php/classes/LowStockEmailObserver.php
-require_once __DIR__ . '/ObserverInterface.php';
+require_once __DIR__ . '/InventoryObserverInterface.php';
 require_once __DIR__ . '/Logger.php';
 
-class LowStockEmailObserver implements ObserverInterface
+class LowStockEmailObserver implements InventoryObserverInterface
 {
     private array $recipients;
 
@@ -12,15 +12,20 @@ class LowStockEmailObserver implements ObserverInterface
         $this->recipients = $recipients;
     }
 
-    public function update(InventorySubject $subject, array $ingredient): void
+    public function updateInventory(InventorySubject $subject, array $ingredient): void
     {
-        // aqui você integraria com mailer real. No exemplo, apenas grava log como "email enviado".
         $subjectLine = "Alerta de estoque baixo: {$ingredient['name']}";
         $message = "Ingrediente {$ingredient['name']} está em {$ingredient['quantity']} {$ingredient['unit']} (limite {$ingredient['threshold']}).";
 
         foreach ($this->recipients as $to) {
-            Logger::getInstance()->log('info', "Simulando envio de email para {$to}: {$subjectLine}", ['to'=>$to,'message'=>$message,'ingredient'=>$ingredient]);
-            // em produção: mail($to,$subjectLine,$message) ou usar biblioteca
+            // gravar log DB
+            Logger::getInstance()->log('info', "Email simulado para {$to}: {$subjectLine}", ['to' => $to, 'ingredient' => $ingredient]);
+
+            // gravar arquivo específico
+            // $file = __DIR__ . '/../../logs/email.log';
+            $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'email.log';
+            $line = date('Y-m-d H:i:s') . " - To: {$to} | Subject: {$subjectLine} | Msg: {$message} | Ingredient: " . json_encode($ingredient, JSON_UNESCAPED_UNICODE) . PHP_EOL;
+            file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
         }
     }
 }

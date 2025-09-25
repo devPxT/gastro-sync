@@ -119,6 +119,26 @@ try {
     echo "<div class='alert alert-success'>Pagamento efetuado e pedido criado (id: {$orderId})</div>";
     echo "<pre>" . htmlspecialchars(json_encode($receipt, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) . "</pre>";
 
+    // notificar cozinheiro, garçom e log através do OrderSubject (Observer)
+    try {
+        if (isset($GLOBALS['ORDER_SUBJECT']) && is_object($GLOBALS['ORDER_SUBJECT'])) {
+            // Atualiza status do pedido e notifica observers.
+            // Observers recebem o order atualizado, oldStatus->newStatus.
+            // Aqui escolhemos 'preparing' para sinalizar a cozinha que precisa iniciar.
+            $notifyOk = $GLOBALS['ORDER_SUBJECT']->updateStatus($orderId, 'preparing');
+            if (! $notifyOk) {
+                // caso updateStatus retorne false, logamos
+                Logger::getInstance()->log('warning', "Falha ao notificar ORDER_SUBJECT para order {$orderId}");
+            }
+        } else {
+            // fallback: log se não há subject registrado
+            Logger::getInstance()->log('warning', 'ORDER_SUBJECT não encontrado ao tentar notificar após checkout', ['order_id' => $orderId]);
+        }
+    } catch (Throwable $ex) {
+        // observer falhou — não reverte o pedido, apenas loga o erro
+        Logger::getInstance()->log('error', 'Exceção ao notificar observers após checkout: ' . $ex->getMessage(), ['order_id' => $orderId]);
+    }
+
 } catch (Throwable $e) {
     $conn->rollback();
     Logger::getInstance()->log('error', 'Erro ao criar pedido/atualizar estoque: ' . $e->getMessage());
