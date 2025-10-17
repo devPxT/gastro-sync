@@ -8,9 +8,9 @@ class DbConnection
     private function __construct()
     {
         $host = 'localhost';
-        $user = 'your_db_user';
-        $password = 'your_db_password';
-        $database = 'your_db_name';
+        $user = 'root';
+        $password = 'PUC@1234';
+        $database = 'teste';
 
         $this->connection = new mysqli($host, $user, $password, $database);
 

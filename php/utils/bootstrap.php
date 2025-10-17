@@ -25,7 +25,7 @@ function ensure_logs_dir(): string
     }
 
     // se falhou, tenta criar em sys_get_temp_dir() (fallback seguro)
-    $tmp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'my_restaurant_logs';
+    $tmp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'logs';
     if (!is_dir($tmp)) {
         @mkdir($tmp, 0775, true);
     }
