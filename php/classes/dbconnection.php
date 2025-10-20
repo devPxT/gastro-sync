@@ -10,7 +10,7 @@ class DbConnection
         $host = 'localhost';
         $user = 'root';
         $password = 'PUC@1234';
-        $database = 'teste';
+        $database = 'gastro';
 
         $this->connection = new mysqli($host, $user, $password, $database);
 
@@ -33,5 +33,5 @@ class DbConnection
     }
 
     private function __clone() {}
-    private function __wakeup() {}
+    public function __wakeup() {}
 }

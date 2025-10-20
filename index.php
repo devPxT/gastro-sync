@@ -1,3 +1,10 @@
+<?php
+session_start();
+$loginError = $_SESSION['login_error'] ?? null;
+unset($_SESSION['login_error']); // limpa erro após exibir
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +17,18 @@
   <script src="js/login.js"></script>
 </head>
 <body>
-  <div class="login" action="php/login.php" method="POST" id="loginForm">
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
+  <form class="login" action="php/login.php" method="POST" id="loginForm">
+    <input type="text" placeholder="Username" name="username" required>
+    <input type="password" placeholder="Password" name="password" required>
     <button id="logar">Login</button>
-  </div>
+  </form>
+
+  <?php if ($loginError): ?>
+    <script>
+      $(function() {
+        showAlert("<?= htmlspecialchars($loginError) ?>");
+      });
+    </script>
+  <?php endif; ?>
 </body>
 </html>

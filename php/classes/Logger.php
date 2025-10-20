@@ -28,15 +28,16 @@ class Logger
             $stmt->bind_param('sss', $level, $message, $contextJson);
             $stmt->execute();
             $stmt->close();
-        } else {
+        } 
+        // else {
             // fallback para arquivo
             // file_put_contents(__DIR__ . '/../../logs/app.log', "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND);
 
-            $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'app.log';
-            file_put_contents($file, "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND | LOCK_EX);
-        }
+        $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'app.log';
+        file_put_contents($file, "[$level] $message " . $contextJson . PHP_EOL, FILE_APPEND | LOCK_EX);
+        // }
     }
 
     private function __clone() {}
-    private function __wakeup() {}
+    public function __wakeup() {}
 }

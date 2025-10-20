@@ -1,5 +1,6 @@
 <?php
 // php/login.php
+require_once __DIR__ . '/bootstrap.php'; // autoload + registro
 require_once __DIR__ . '/classes/DbConnection.php';
 require_once __DIR__ . '/classes/Logger.php';
 
@@ -47,7 +48,7 @@ if (! $user) {
 }
 
 // assumimos que password no DB está com hash (password_hash)
-$hash = $user['password'];
+// $hash = $user['password'];
 
 // if (password_verify($password, $hash)) {
 if ($user['password'] === $password) {

@@ -1,4 +1,10 @@
 $(function() {
+    // função reutilizável para mostrar alertas bonitos
+    window.showAlert = function(message) {
+        alert(message); // simples; se quiser, pode substituir por modal do Bootstrap
+    };
+
+
     $('#loginForm').on('submit', function(e) {
         var user = $('input[name="username"]').val().trim();
         var password = $('input[name="password"]').val().trim();

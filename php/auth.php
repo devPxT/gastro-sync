@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 if (empty($_SESSION['user_id'])) {
     // opcional: salvar a URL pedida para retorno após login
     $_SESSION['after_login_redirect'] = $_SERVER['REQUEST_URI'];
-    header('Location: /index.php');
+    header('Location: index.php');
     exit;
 }
 
