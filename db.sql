@@ -236,3 +236,29 @@ WHERE r.name IN ('Admin','Cozinheiro');
 
 
 
+-- 1) criar tabela reorders (se ainda não existe)
+CREATE TABLE IF NOT EXISTS reorders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ingredient_id INT NOT NULL,
+  quantity DECIMAL(12,3) NOT NULL DEFAULT 0,
+  status ENUM('requested','ordered','received','cancelled') NOT NULL DEFAULT 'requested',
+  estimated_total DECIMAL(12,2) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  received_at TIMESTAMP NULL DEFAULT NULL,
+  note TEXT DEFAULT NULL,
+  FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2) adicionar coluna unit_price em ingredients (opcional, se já existir ignore)
+ALTER TABLE ingredients
+  ADD COLUMN unit_price DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+
+-- 3) permission para Recompras (acesso à tela)
+INSERT IGNORE INTO permissions (code, name, description) VALUES
+('reorders.view', 'Acessar Recompras', 'Acessar a tela de recompras');
+
+-- 4) mapear permission -> roles Admin e Estoque
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id FROM roles r JOIN permissions p ON p.code = 'reorders.view'
+WHERE r.name IN ('Admin','Estoque')
+ON DUPLICATE KEY UPDATE role_id = role_id;
