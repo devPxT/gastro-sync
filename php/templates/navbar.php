@@ -30,6 +30,31 @@ $menuItems = [
     ['label'=>'Caixa','link'=>'caixa.php','perm'=>'caixa.view','section'=>'caixa.php'],
     ['label'=>'Cozinha','link'=>'kitchen.php','perm'=>'kitchen.view','section'=>'kitchen.php'],
 ];
+
+// buscar nomes das roles do usuário (se houver userId)
+$userRoles = [];
+if ($userId) {
+    try {
+        require_once __DIR__ . '/../classes/DbConnection.php';
+        $conn = DbConnection::getInstance()->getConnection();
+        $stmt = $conn->prepare("
+            SELECT r.name
+            FROM roles r
+            JOIN users_roles ur ON ur.role_id = r.id
+            WHERE ur.user_id = ?
+        ");
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        while ($row = $res->fetch_assoc()) {
+            if (!empty($row['name'])) $userRoles[] = $row['name'];
+        }
+        $stmt->close();
+    } catch (Throwable $e) {
+        // não interrompe a renderização da navbar; opcional: Logger::getInstance()->log(...)
+    }
+}
+$roleLabel = !empty($userRoles) ? $userRoles[0] : '-';
 ?>
 
 <!-- PRIMEIRA LINHA: brand (left) + user block (right) -->
@@ -40,6 +65,7 @@ $menuItems = [
     <div class="d-flex align-items-center user-block">
       <div class="me-3 text-end user-name">
         <small class="text-white">Olá, <strong><?= htmlspecialchars($username) ?></strong></small><br>
+        <small class="text-white">Função: <strong><?= htmlspecialchars($roleLabel) ?></strong></small>
         <!-- <strong class="text-white"></strong> -->
       </div>
       <div class="me-2 avatar">
