@@ -41,6 +41,10 @@ unset($_SESSION['flash_alert']);
         ['label'=>'Estoque','link'=>'estoque.php','perm'=>'estoque.view'],
         ['label'=>'Faturamento','link'=>'faturamento.php','perm'=>'faturamento.view'],
         ['label'=>'Relatórios','link'=>'relatorios.php','perm'=>'relatorios.view'],
+        ['label'=>'Caixa','link'=>'caixa.php','perm'=>'caixa.view'],
+        ['label'=>'Cozinha','link'=>'kitchen.php','perm'=>'kitchen.view'],
+        // ['label'=>'Usuários','link'=>'usuarios.php','perm'=>'usuarios.view'],
+        // ['label'=>'Configurações','link'=>'configuracoes.php','perm'=>'configuracoes.view'],
       ];
       // exibir somente os permitidos
       $visible = array_filter($buttons, fn($b) => in_array($b['perm'], $userPerms, true));

@@ -27,6 +27,8 @@ $menuItems = [
     ['label'=>'Estoque','link'=>'estoque.php','perm'=>'estoque.view','section'=>'estoque.php'],
     ['label'=>'Faturamento','link'=>'faturamento.php','perm'=>'faturamento.view','section'=>'faturamento.php'],
     ['label'=>'Relatórios','link'=>'relatorios.php','perm'=>'relatorios.view','section'=>'relatorios.php'],
+    ['label'=>'Caixa','link'=>'caixa.php','perm'=>'caixa.view','section'=>'caixa.php'],
+    ['label'=>'Cozinha','link'=>'kitchen.php','perm'=>'kitchen.view','section'=>'kitchen.php'],
 ];
 ?>
 

@@ -7,3 +7,17 @@
 [info] Usuário logou: teste {"user_id":1}
 [info] Usuário logou: teste {"user_id":1}
 [info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Order #1: status paid -> preparing (cliente=Teste, mesa=3) {"order_id":"1","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #1 - Começar preparo (mesa 3) {"order_id":"1"}
+[info] Notificando Garçom João: pedido #1 agora está 'preparing' {"order_id":"1","waiter":"Garçom João"}
+[info] Order #1: status preparing -> ready (cliente=Teste, mesa=3) {"order_id":"1","old":"preparing","new":"ready"}
+[info] Cozinha: pedido #1 pronto para entrega/retirada {"order_id":"1"}
+[info] Notificando Garçom João: pedido #1 agora está 'ready' {"order_id":"1","waiter":"Garçom João"}
+[info] Order #2: status paid -> preparing (cliente=João da Silva, mesa=2) {"order_id":"2","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #2 - Começar preparo (mesa 2) {"order_id":"2"}
+[info] Notificando Garçom João: pedido #2 agora está 'preparing' {"order_id":"2","waiter":"Garçom João"}
+[info] Order #2: status preparing -> ready (cliente=João da Silva, mesa=2) {"order_id":"2","old":"preparing","new":"ready"}
+[info] Cozinha: pedido #2 pronto para entrega/retirada {"order_id":"2"}
+[info] Notificando Garçom João: pedido #2 agora está 'ready' {"order_id":"2","waiter":"Garçom João"}
