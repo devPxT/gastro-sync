@@ -1,1 +1,9 @@
 [info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[warning] Tentativa de login inválida: usuário t []
+[info] Usuário logou: teste {"user_id":1}
+[warning] Tentativa de login inválida: usuário login []
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}

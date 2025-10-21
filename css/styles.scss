@@ -1,0 +1,109 @@
+$bg-red: rgba(244,91,105,1);
+$menu-gray: #e6e6e6;
+$menu-gray-dark: #cfcfcf;
+$nav-text: #fff;
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: $bg-red;
+  position: relative;
+  padding-bottom: 80px; // espaço para footer
+}
+
+/* TOP BAR */
+nav.topbar {
+  background: $bg-red;
+  padding: 8px 0;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+  .brand {
+    color: $nav-text;
+    font-weight: 800;
+    font-size: 1.4rem;
+    text-decoration: none;
+    padding-left: 10px;
+  }
+  .user-block { display:flex; align-items:center; }
+  .avatar-circle {
+    display:inline-block;
+    width:44px; height:44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.1rem;
+  }
+  .logout-btn { margin-right:10px; }
+}
+
+/* SECONDARY NAV (menu line) */
+nav.secondarybar {
+  background: $menu-gray;
+  padding: 6px 0;
+  .navbar-nav .nav-link { color: #333 !important; padding: 8px 14px; border-radius:4px; }
+  .navbar-nav .nav-link.active { background: $menu-gray-dark; font-weight:700; color:#111 !important; }
+  .navbar-nav .dropdown-menu { min-width: 180px; }
+  .dropdown-item.selected { background: $menu-gray-dark; font-weight:700; }
+}
+
+/* GRID de BOTÕES - 3 por linha */
+.buttons-wrapper {
+  display:flex;
+  justify-content:center;
+}
+.buttons-grid {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  justify-items: center;
+  align-items: center;
+  margin: 20px auto;
+}
+.card-button {
+  width: 320px;
+  max-width: 90%;
+  background: #e6e6e6;
+  color: #111;
+  padding: 36px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 1.6rem;
+  font-weight:700;
+  border-radius:6px;
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.06);
+  transition: transform .12s;
+}
+.card-button:hover { transform: translateY(-6px); }
+
+/* responsividade: em telas pequenas empilha 1 por linha */
+@media (max-width: 900px) {
+  .buttons-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .buttons-grid { grid-template-columns: 1fr; padding: 0 16px; }
+}
+
+/* footer fixado no final */
+.site-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.02);
+  color: #fff;
+  padding: 8px 0;
+  text-align:center;
+  border-top: 2px solid rgba(0,0,0,0.06);
+}
+
+/* pequenos ajustes no navbar-toggler-icon para contraste */
+.navbar-toggler-icon { filter: invert(1); }
