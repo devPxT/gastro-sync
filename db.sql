@@ -114,3 +114,125 @@ SELECT r.id, p.id FROM roles r JOIN permissions p ON p.code IN ('home.view','est
 
 -- Example: assign a role to a user (assumes user id=1 exists)
 INSERT IGNORE INTO users_roles (user_id, role_id) SELECT 1, id FROM roles WHERE name='Admin';
+
+
+-- garante engine InnoDB e charset
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 1) ingredients (criar primeiro)
+CREATE TABLE IF NOT EXISTS ingredients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  quantity DECIMAL(12,3) NOT NULL DEFAULT 0,   -- quantidade em unidade/medida
+  threshold DECIMAL(12,3) NOT NULL DEFAULT 0,  -- nível mínimo para alerta
+  unit VARCHAR(30) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2) menu_items (se ainda não tiver)
+CREATE TABLE IF NOT EXISTS menu_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(200) NOT NULL,
+  price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 3) recipes (agora a FK para ingredients já funciona)
+CREATE TABLE IF NOT EXISTS recipes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  menu_item_id INT NOT NULL,
+  ingredient_id INT NOT NULL,
+  qty_per_serving DECIMAL(12,3) NOT NULL DEFAULT 0,
+  FOREIGN KEY (menu_item_id) REFERENCES menu_items(id) ON DELETE CASCADE,
+  FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- orders
+CREATE TABLE IF NOT EXISTS orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_name VARCHAR(200) DEFAULT NULL,
+  table_number VARCHAR(50) DEFAULT NULL,
+  total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  discount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  status VARCHAR(50) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- order_items
+CREATE TABLE IF NOT EXISTS order_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  menu_item_id INT DEFAULT NULL,
+  name VARCHAR(200) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  quantity INT NOT NULL DEFAULT 1,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+
+-- payments
+CREATE TABLE IF NOT EXISTS payments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  method VARCHAR(50) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  data JSON NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+
+INSERT INTO ingredients (name, quantity, threshold, unit)
+VALUES
+  ('Pão', 100, 10, 'unidade'),
+  ('Hambúrguer (carne)', 50, 5, 'unidade'),
+  ('Batata (kg)', 20, 5, 'kg'),
+  ('Laranja (un)', 40, 5, 'unidade');
+
+-- Seed exemplo menu_items (ajuste nomes/valores)
+INSERT INTO menu_items (name, price) VALUES
+('X-Burguer', 18.50),
+('Batata Frita', 8.00),
+('Suco Natural', 6.00),
+('Salada', 10.00);
+
+-- Inserir recipes usando subqueries para encontrar os ids
+INSERT INTO recipes (menu_item_id, ingredient_id, qty_per_serving)
+SELECT m.id, i.id, 1.0
+FROM menu_items m JOIN ingredients i ON m.name = 'X-Burguer' AND i.name = 'Pão';
+
+INSERT INTO recipes (menu_item_id, ingredient_id, qty_per_serving)
+SELECT m.id, i.id, 1.0
+FROM menu_items m JOIN ingredients i ON m.name = 'X-Burguer' AND i.name = 'Hambúrguer (carne)';
+
+INSERT INTO recipes (menu_item_id, ingredient_id, qty_per_serving)
+SELECT m.id, i.id, 0.3
+FROM menu_items m JOIN ingredients i ON m.name = 'Batata Frita' AND i.name = 'Batata (kg)';
+
+INSERT INTO recipes (menu_item_id, ingredient_id, qty_per_serving)
+SELECT m.id, i.id, 1.0
+FROM menu_items m JOIN ingredients i ON m.name = 'Suco Natural' AND i.name = 'Laranja (un)';
+
+-- Add permission code for Caixa (run once)
+INSERT IGNORE INTO permissions (code, name, description) VALUES ('caixa.view','Acessar Caixa','Acessar a tela do caixa');
+-- Grant 'caixa.view' to role 'Caixa' if you have that role
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id FROM roles r JOIN permissions p ON p.code = 'caixa.view' WHERE r.name = 'Caixa'
+ON DUPLICATE KEY UPDATE role_id = role_id;
+
+-- cria permissão Cozinha
+INSERT IGNORE INTO permissions (code, name, description)
+VALUES ('kitchen.view', 'Acessar Cozinha', 'Acessar a tela da cozinha');
+
+-- mapear permission -> role Admin e Cozinheiro
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.code = 'kitchen.view'
+WHERE r.name IN ('Admin','Cozinheiro');
+
+
+
