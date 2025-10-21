@@ -21,3 +21,23 @@
 [info] Order #2: status preparing -> ready (cliente=João da Silva, mesa=2) {"order_id":"2","old":"preparing","new":"ready"}
 [info] Cozinha: pedido #2 pronto para entrega/retirada {"order_id":"2"}
 [info] Notificando Garçom João: pedido #2 agora está 'ready' {"order_id":"2","waiter":"Garçom João"}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
+[info] Ingrediente atualizado: Batata (kg) {"ingredient_id":3}
+[info] Ingrediente atualizado: Batata (kg) {"ingredient_id":3}
+[info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
+[info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
+[warning] Estoque BAIXO: Laranja (un) (id=4) qty=4,000 unidade <= threshold=5,000 {"id":"4","name":"Laranja (un)","quantity":4,"threshold":5,"unit":"unidade"}
+[info] Email simulado para chef@restaurante.com: Alerta de estoque baixo: Laranja (un) {"to":"chef@restaurante.com","ingredient":{"id":"4","name":"Laranja (un)","quantity":4,"threshold":5,"unit":"unidade"}}
+[info] Email simulado para gerente@restaurante.com: Alerta de estoque baixo: Laranja (un) {"to":"gerente@restaurante.com","ingredient":{"id":"4","name":"Laranja (un)","quantity":4,"threshold":5,"unit":"unidade"}}
+[info] Reorder criado automaticamente {"ingredient_id":4,"quantity":6,"estimated_total":null}
+[info] Order #1: status paid -> preparing (cliente=teste recompra, mesa=1) {"order_id":"1","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #1 - Começar preparo (mesa 1) {"order_id":"1"}
+[info] Notificando Garçom João: pedido #1 agora está 'preparing' {"order_id":"1","waiter":"Garçom João"}
+[info] Reorder recebido e estoque atualizado {"reorder_id":1,"ingredient_id":4,"quantity_added":20}
+[info] Order #1: status preparing -> ready (cliente=teste recompra, mesa=1) {"order_id":"1","old":"preparing","new":"ready"}
+[info] Cozinha: pedido #1 pronto para entrega/retirada {"order_id":"1"}
+[info] Notificando Garçom João: pedido #1 agora está 'ready' {"order_id":"1","waiter":"Garçom João"}
+[info] Usuário logou: teste {"user_id":1}

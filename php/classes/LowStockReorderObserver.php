@@ -9,6 +9,9 @@ class LowStockReorderObserver implements InventoryObserverInterface
     private mysqli $conn;
     private float $multiplier;
 
+    /**
+     * @param float $multiplier quantidade para reorder = threshold * multiplier
+     */
     public function __construct(float $multiplier = 2.0)
     {
         $this->conn = DbConnection::getInstance()->getConnection();
@@ -17,28 +20,34 @@ class LowStockReorderObserver implements InventoryObserverInterface
 
     public function updateInventory(InventorySubject $subject, array $ingredient): void
     {
-        $desired = max(0.0, ($ingredient['threshold'] * $this->multiplier) - $ingredient['quantity']);
-        if ($desired <= 0) return;
+        $ingredientId = (int)$ingredient['id'];
+        $currentQty = (float)$ingredient['quantity'];
+        $threshold = (float)$ingredient['threshold'];
 
-        $stmt = $this->conn->prepare("INSERT INTO reorders (ingredient_id, quantity, status) VALUES (?, ?, 'requested')");
-        $stmt->bind_param('id', $ingredient['id'], $desired);
-        $ok = $stmt->execute();
+        // calcular quantidade a recomprar
+        $desired = max(0.0, ($threshold * $this->multiplier) - $currentQty);
+        $desired = round($desired, 3);
+        if ($desired <= 0.0) return;
+
+        // buscar unit_price se existir para estimativa
+        $stmt = $this->conn->prepare("SELECT unit_price FROM ingredients WHERE id = ? LIMIT 1");
+        $stmt->bind_param('i', $ingredientId);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
         $stmt->close();
+        $unitPrice = isset($row['unit_price']) ? (float)$row['unit_price'] : 0.0;
+        $estimatedTotal = $unitPrice > 0 ? round($unitPrice * $desired, 2) : null;
+
+        // inserir registro na tabela reorders
+        $stmt2 = $this->conn->prepare("INSERT INTO reorders (ingredient_id, quantity, status, estimated_total) VALUES (?, ?, 'requested', ?)");
+        $stmt2->bind_param('idd', $ingredientId, $desired, $estimatedTotal);
+        $ok = $stmt2->execute();
+        $stmt2->close();
 
         if ($ok) {
-            $msg = "Reorder criado automaticamente para ingrediente {$ingredient['name']} (id={$ingredient['id']}) qty=" . number_format($desired,3,',','.');
-            Logger::getInstance()->log('info', $msg, ['ingredient_id' => $ingredient['id'], 'quantity' => $desired]);
-
-            // $file = __DIR__ . '/../../logs/reorders.log';
-            $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'reorders.log';
-            $line = date('Y-m-d H:i:s') . " - {$msg} " . json_encode(['ingredient'=>$ingredient,'desired'=>$desired], JSON_UNESCAPED_UNICODE) . PHP_EOL;
-            file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+            Logger::getInstance()->log('info', 'Reorder criado automaticamente', ['ingredient_id' => $ingredientId, 'quantity' => $desired, 'estimated_total' => $estimatedTotal]);
         } else {
-            Logger::getInstance()->log('error', 'Falha ao criar reorder', ['ingredient_id' => $ingredient['id']]);
-            // $file = __DIR__ . '/../../logs/reorders.log';
-            $file = $GLOBALS['LOGS_DIR'] . DIRECTORY_SEPARATOR . 'reorders.log';
-            $line = date('Y-m-d H:i:s') . " - Falha ao criar reorder para ingredient_id={$ingredient['id']}" . PHP_EOL;
-            file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+            Logger::getInstance()->log('error', 'Falha ao criar reorder automaticamente', ['ingredient_id' => $ingredientId]);
         }
     }
 }

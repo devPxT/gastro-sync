@@ -1,0 +1,2 @@
+2025-10-22 00:37:53 - To: chef@restaurante.com | Subject: Alerta de estoque baixo: Laranja (un) | Msg: Ingrediente Laranja (un) está em 4 unidade (limite 5). | Ingredient: {"id":"4","name":"Laranja (un)","quantity":4,"threshold":5,"unit":"unidade"}
+2025-10-22 00:37:53 - To: gerente@restaurante.com | Subject: Alerta de estoque baixo: Laranja (un) | Msg: Ingrediente Laranja (un) está em 4 unidade (limite 5). | Ingredient: {"id":"4","name":"Laranja (un)","quantity":4,"threshold":5,"unit":"unidade"}
