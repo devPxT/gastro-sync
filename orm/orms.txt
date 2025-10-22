@@ -1,0 +1,29 @@
+ORM 1 — Active Record
+    Arquivos
+        php/active/Product.php
+        php/active/Category.php
+        php/active/ActiveRecord.php
+
+    Tabelas Geradas:
+        ar_categories
+        ar_products
+
+ORM 2 — Data Mapper
+    Arquivos
+        php/mapper/Invoice.php (entidade)
+        php/mapper/InvoiceLine.php (entidade)
+        php/mapper/InvoiceMapper.php (mapper)
+        php/mapper/InvoiceLineMapper.php (mapper)
+
+    Tabelas Geradas:
+        dm_invoices
+        dm_invoice_lines
+
+ORM 3 — Table Data Gateway
+    Arquivos
+        php/gateway/SupplierGateway.php
+        php/gateway/ReorderGateway.php
+
+    Tabelas Geradas:
+        tg_suppliers
+        tg_reorders
