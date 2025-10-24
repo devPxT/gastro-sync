@@ -1,6 +1,9 @@
 <?php
 // php/bootstrap.php
+date_default_timezone_set('America/Sao_Paulo');
+
 require_once __DIR__ . '/autoload.php';
+
 
 /**
  * Garante diretório de logs portável (Windows/Linux).

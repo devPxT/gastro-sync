@@ -41,3 +41,50 @@
 [info] Cozinha: pedido #1 pronto para entrega/retirada {"order_id":"1"}
 [info] Notificando Garçom João: pedido #1 agora está 'ready' {"order_id":"1","waiter":"Garçom João"}
 [info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Order #2: status paid -> preparing (cliente=teste, mesa=2) {"order_id":"2","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #2 - Começar preparo (mesa 2) {"order_id":"2"}
+[info] Notificando Garçom João: pedido #2 agora está 'preparing' {"order_id":"2","waiter":"Garçom João"}
+[info] Reorder removido (id=1) {"reorder_id":1}
+[info] Reorder criado manualmente {"reorder_id":2,"ingredient_id":3,"quantity":30}
+[info] Order #2: status preparing -> ready (cliente=teste, mesa=2) {"order_id":"2","old":"preparing","new":"ready"}
+[info] Cozinha: pedido #2 pronto para entrega/retirada {"order_id":"2"}
+[info] Notificando Garçom João: pedido #2 agora está 'ready' {"order_id":"2","waiter":"Garçom João"}
+[info] Ingrediente atualizado: Batata (kg) {"ingredient_id":3}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: caixa {"user_id":2}
+[info] Usuário logou: caixa {"user_id":2}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: caixa {"user_id":2}
+[info] Usuário logou: teste {"user_id":1}
+[info] Order #3: status paid -> preparing (cliente=teste, mesa=1) {"order_id":"3","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #3 - Começar preparo (mesa 1) {"order_id":"3"}
+[info] Notificando Garçom João: pedido #3 agora está 'preparing' {"order_id":"3","waiter":"Garçom João"}
+[info] Usuário logou: teste {"user_id":1}
+[info] Usuário logou: teste {"user_id":1}
+[info] Reorder recebido e estoque atualizado {"reorder_id":2,"ingredient_id":3,"quantity_added":30}
+[info] Order #4: status paid -> preparing (cliente=teste, mesa=2) {"order_id":"4","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #4 - Começar preparo (mesa 2) {"order_id":"4"}
+[info] Notificando Garçom João: pedido #4 agora está 'preparing' {"order_id":"4","waiter":"Garçom João"}
+[info] Order #5: status paid -> preparing (cliente=teste, mesa=3) {"order_id":"5","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #5 - Começar preparo (mesa 3) {"order_id":"5"}
+[info] Notificando Garçom João: pedido #5 agora está 'preparing' {"order_id":"5","waiter":"Garçom João"}
+[info] Order #6: status paid -> preparing (cliente=teste, mesa=3) {"order_id":"6","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #6 - Começar preparo (mesa 3) {"order_id":"6"}
+[info] Notificando Garçom João: pedido #6 agora está 'preparing' {"order_id":"6","waiter":"Garçom João"}
+[info] Order #7: status paid -> preparing (cliente=teste pix, mesa=2) {"order_id":"7","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #7 - Começar preparo (mesa 2) {"order_id":"7"}
+[info] Notificando Garçom João: pedido #7 agora está 'preparing' {"order_id":"7","waiter":"Garçom João"}
+[info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
+[warning] Estoque BAIXO: Laranja (un) (id=4) qty=5,000 unidade <= threshold=5,000 {"id":"4","name":"Laranja (un)","quantity":5,"threshold":5,"unit":"unidade"}
+[info] Email simulado para chef@restaurante.com: Alerta de estoque baixo: Laranja (un) {"to":"chef@restaurante.com","ingredient":{"id":"4","name":"Laranja (un)","quantity":5,"threshold":5,"unit":"unidade"}}
+[info] Email simulado para gerente@restaurante.com: Alerta de estoque baixo: Laranja (un) {"to":"gerente@restaurante.com","ingredient":{"id":"4","name":"Laranja (un)","quantity":5,"threshold":5,"unit":"unidade"}}
+[info] Reorder criado automaticamente {"ingredient_id":4,"quantity":5,"estimated_total":null}
+[info] Order #8: status paid -> preparing (cliente=laranja, mesa=1) {"order_id":"8","old":"paid","new":"preparing"}
+[info] Cozinha: pedido #8 - Começar preparo (mesa 1) {"order_id":"8"}
+[info] Notificando Garçom João: pedido #8 agora está 'preparing' {"order_id":"8","waiter":"Garçom João"}
+[info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
+[info] Reorder removido (id=3) {"reorder_id":3}

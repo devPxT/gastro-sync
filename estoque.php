@@ -13,6 +13,18 @@ $CURRENT_SECTION = 'estoque.php';
 // flash
 $flash = $_SESSION['flash_alert'] ?? null;
 unset($_SESSION['flash_alert']);
+
+function format_quantity(float $qty, int $maxDecimals = 3): string
+{
+    // Formata com decimais fixos, sem separador de milhares
+    $s = number_format($qty, $maxDecimals, ',', '');
+    // remove zeros à direita e vírgula sobrando
+    $s = rtrim($s, '0');
+    $s = rtrim($s, ',');
+    // se string vazia (p.ex. 0,000) retorna "0"
+    return $s === '' ? '0' : $s;
+}
+
 ?>
 <!doctype html>
 <html lang="pt-br">

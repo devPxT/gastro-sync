@@ -8,7 +8,7 @@ require_once __DIR__ . '/php/classes/DbConnection.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 requirePermissionOrRedirect($_SESSION['user_id'] ?? 0, 'reorders.view');
 
-$CURRENT_SECTION = 'estoque.php'; // keeps the menu highlighting to Estoque or Recompras as you prefer
+$CURRENT_SECTION = 'reorders.php'; // keeps the menu highlighting to Estoque or Recompras as you prefer
 
 $flash = $_SESSION['flash_alert'] ?? null;
 unset($_SESSION['flash_alert']);

@@ -69,6 +69,7 @@ unset($_SESSION['flash_alert']);
   <link href="css/styles.css" rel="stylesheet">
   <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/kitchen.js"></script>
   <style>
     /* ajustes visuais rápidos para a cozinha */
     .kitchen-grid { display:flex; flex-wrap:wrap; gap:18px; }
@@ -98,7 +99,17 @@ unset($_SESSION['flash_alert']);
       <div class="kitchen-grid">
         <?php foreach ($orders as $o):
             $oid = (int)$o['id'];
+
             $createdAt = $o['created_at'];
+            $dbTz = new DateTimeZone('America/Sao_Paulo');
+            try {
+                $createdDT = new DateTime($createdAt, $dbTz);
+            } catch (Throwable $e) {
+                // fallback simples: tentar sem timezone
+                $createdDT = new DateTime($createdAt);
+            }
+            $createdDisplay = $createdDT->format('d/m/Y H:i');
+
             $deadline = (new DateTime($createdAt))->modify("+{$defaultPrepMinutes} minutes")->format('c');
             $items = $orderItems[$oid] ?? [];
         ?>
@@ -107,7 +118,7 @@ unset($_SESSION['flash_alert']);
               <div>
                 <div><strong>Pedido #<?= $oid ?></strong></div>
                 <div class="meta">Mesa: <?= htmlspecialchars($o['table_number'] ?? '-') ?> — Cliente: <?= htmlspecialchars($o['customer_name'] ?? '-') ?></div>
-                <div class="meta">Criado: <?= htmlspecialchars($createdAt) ?> — Pgto: <?= htmlspecialchars($o['payment_method'] ?? '-') ?></div>
+                <div class="meta">Criado: <?= htmlspecialchars($createdDisplay) ?> — Pgto: <?= htmlspecialchars($o['payment_method'] ?? '-') ?></div>
               </div>
               <div class="text-end">
                 <div class="timer text-danger" id="timer-<?= $oid ?>">—</div>
@@ -130,7 +141,7 @@ unset($_SESSION['flash_alert']);
 
             <div class="kitchen-actions">
               <button class="btn btn-sm btn-success mark-ready" data-order-id="<?= $oid ?>">Marcar como pronto</button>
-              <button class="btn btn-sm btn-outline-secondary btn-refresh-order" data-order-id="<?= $oid ?>">Atualizar</button>
+              <button class="btn btn-sm btn-secondary btn-refresh-order" data-order-id="<?= $oid ?>">Atualizar</button>
             </div>
           </div>
         <?php endforeach; ?>
@@ -139,70 +150,6 @@ unset($_SESSION['flash_alert']);
   </div>
 
   <?php include __DIR__ . '/php/templates/footer.php'; ?>
-
-  <script>
-  // kitchen.js inline
-  $(function(){
-    function updateTimerFor(card) {
-      const deadline = new Date(card.data('deadline'));
-      const now = new Date();
-      const diffMs = deadline - now;
-      const $timer = card.find('.timer');
-      if (diffMs >= 0) {
-        // remaining
-        const m = Math.floor(diffMs / 60000);
-        const s = Math.floor((diffMs % 60000) / 1000);
-        $timer.text(`${m}m ${s}s`);
-        $timer.removeClass('text-danger').addClass('text-success');
-      } else {
-        // overdue
-        const overdue = Math.abs(diffMs);
-        const m = Math.floor(overdue / 60000);
-        const s = Math.floor((overdue % 60000) / 1000);
-        $timer.text(`ATRASADO ${m}m ${s}s`);
-        $timer.removeClass('text-success').addClass('text-danger');
-      }
-    }
-
-    // initial timers
-    $('.kitchen-card').each(function(){
-      updateTimerFor($(this));
-    });
-
-    // refresh timers every second
-    setInterval(function(){
-      $('.kitchen-card').each(function(){ updateTimerFor($(this)); });
-    }, 1000);
-
-    // mark ready via AJAX
-    $(document).on('click', '.mark-ready', function(){
-      const orderId = $(this).data('order-id');
-      if (!confirm('Marcar pedido #' + orderId + ' como PRONTO?')) return;
-      const $btn = $(this);
-      $btn.prop('disabled', true).text('Processando...');
-      $.post('php/kitchen_action.php', { order_id: orderId, action: 'ready' }, function(resp){
-        if (resp && resp.ok) {
-          showAlert(resp.msg || 'Marcado como pronto');
-          // fade/mark card as ready, then remove after 2s
-          const $card = $('#order-card-' + orderId);
-          $card.addClass('ready');
-          $btn.text('Pronto').prop('disabled', true);
-          setTimeout(()=> $card.fadeOut(400, ()=> $card.remove()), 1500);
-        } else {
-          showAlert(resp && resp.msg ? resp.msg : 'Falha ao marcar pronto');
-          $btn.prop('disabled', false).text('Marcar como pronto');
-        }
-      }, 'json').fail(function(){
-        showAlert('Erro de rede ao marcar pronto.');
-        $btn.prop('disabled', false).text('Marcar como pronto');
-      });
-    });
-
-    // manual refresh button
-    $('#refreshBtn').on('click', function(){ location.reload(); });
-    $(document).on('click', '.btn-refresh-order', function(){ location.reload(); });
-  });
-  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

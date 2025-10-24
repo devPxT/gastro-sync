@@ -44,16 +44,16 @@ unset($_SESSION['flash_alert']);
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="card p-3 mb-3">
-          <h5>Registrar Pedido</h5>
-          <form id="caixaForm" action="php/process_caixa.php" method="POST" autocomplete="off">
-            <div class="mb-3">
+          <h5 style="font-weight: bold; font-size: 24px;">Registrar Pedido</h5>
+          <form id="caixaForm" action="php/process_caixa.php" method="POST" autocomplete="off" class="row">
+            <div class="mb-3 col-9">
               <label class="form-label">Nome do Cliente (opcional)</label>
               <input name="customer_name" class="form-control" placeholder="Nome do cliente (sem cadastro)">
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 col-3">
               <label class="form-label">Mesa</label>
-              <input name="table_number" class="form-control" placeholder="Número/Identificação da mesa">
+              <input name="table_number" class="form-control" placeholder="Identificação da mesa">
             </div>
 
             <div class="mb-3">
@@ -62,9 +62,9 @@ unset($_SESSION['flash_alert']);
                 <select id="menuSelect" class="form-select">
                   <option value="">-- selecione um item --</option>
                  
-                  <option value="2" data-name="Batata Frita" data-price="8,00">Batata Frita — R$ 8,00</option>
-                  <option value="3" data-name="Suco Natural" data-price="6,00">Suco Natural — R$ 6,00</option>
-                  <option value="1" data-name="X-Burguer" data-price="18,50">X-Burguer — R$ 18,50</option>
+                  <option value="2" data-name="Batata Frita" data-price="8.00">Batata Frita — R$ 8,00</option>
+                  <option value="3" data-name="Suco Natural" data-price="6.00">Suco Natural — R$ 6,00</option>
+                  <option value="1" data-name="X-Burguer" data-price="18.50">X-Burguer — R$ 18,50</option>
                 </select>
                 <input id="menuQty" type="number" class="form-control" value="1" min="1" style="max-width:90px;">
                 <button id="addItemBtn" class="btn btn-primary">Adicionar</button>
@@ -83,7 +83,7 @@ unset($_SESSION['flash_alert']);
               </table>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 col-5">
               <label class="form-label">Desconto</label>
               <div class="input-group">
                 <select id="discountType" class="form-select" name="discount_type" style="max-width:160px;">
@@ -95,44 +95,48 @@ unset($_SESSION['flash_alert']);
               </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 col-4">
               <label class="form-label">Método de Pagamento</label>
               <select id="paymentMethod" name="payment_method" class="form-select mb-2">
                 <option value="cash">Dinheiro</option>
                 <option value="card">Cartão</option>
                 <option value="pix">PIX</option>
               </select>
+            </div>
 
+            <div class="mb-3 col-3">
               <div id="paymentFields">
                 <div id="cashFields" class="pay-block">
-                  <label>Recebido (Dinheiro)</label>
+                  <label class="form-label">Recebido (Dinheiro)</label>
                   <input type="number" step="0.01" name="cash_received" class="form-control" placeholder="Valor recebido" />
                 </div>
 
                 <div id="cardFields" class="pay-block" style="display:none;">
-                  <label>Número do Cartão</label>
+                  <label class="form-label">Número do Cartão</label>
                   <input type="text" name="card_number" class="form-control" placeholder="**** **** **** 1234" />
                   <label class="mt-2">Parcelas</label>
                   <input type="number" name="installments" class="form-control" value="1" min="1" />
                 </div>
 
                 <div id="pixFields" class="pay-block" style="display:none;">
-                  <label>Chave PIX</label>
+                  <label class="form-label">Chave PIX</label>
                   <input type="text" name="pix_key" class="form-control" placeholder="Chave PIX" />
                 </div>
               </div>
             </div>
 
-            <div class="mb-3">
-              <p>Subtotal: <strong id="displaySubtotal">R$ 0,00</strong></p>
-              <p>Desconto: <strong id="displayDiscount">R$ 0,00</strong></p>
-              <p>Total a Pagar: <strong id="displayTotal">R$ 0,00</strong></p>
+            <div class="mb-1">
+              <p class="text-warning">Subtotal: <strong id="displaySubtotal">R$ 0,00</strong></p>
+              <p class="text-danger">Desconto: <strong id="displayDiscount">R$ 0,00</strong></p>
+              <p class="text-success">Total a Pagar: <strong id="displayTotal">R$ 0,00</strong></p>
             </div>
 
             <!-- hidden: carrinho em JSON (apenas ids e qty) -->
             <input type="hidden" name="cart_json" id="cartJson" />
 
-            <button id="submitBtn" type="submit" class="btn btn-success">Registrar Pedido e Pagar</button>
+            <div class="mb-1 col-12">
+             <button id="submitBtn" type="submit" class="btn btn-success" style="float: right;">Registrar Pedido e Pagar</button>
+            </div>
           </form>
         </div>
       </div>

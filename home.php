@@ -39,6 +39,7 @@ unset($_SESSION['flash_alert']);
         ['label'=>'Cardápio','link'=>'cardapio.php','perm'=>'cardapio.view'],
         ['label'=>'Estações','link'=>'estacoes.php','perm'=>'estacoes.view'],
         ['label'=>'Estoque','link'=>'estoque.php','perm'=>'estoque.view'],
+        ['label'=>'Recompras','link'=>'recompras.php','perm'=>'reorders.view'],
         ['label'=>'Faturamento','link'=>'faturamento.php','perm'=>'faturamento.view'],
         ['label'=>'Relatórios','link'=>'relatorios.php','perm'=>'relatorios.view'],
         ['label'=>'Caixa','link'=>'caixa.php','perm'=>'caixa.view'],

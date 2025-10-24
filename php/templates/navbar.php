@@ -19,12 +19,13 @@ $section = $CURRENT_SECTION ?? basename($_SERVER['SCRIPT_NAME']);
 $menuItems = [
     ['label'=>'Home','link'=>'home.php','perm'=>'home.view','section'=>'home.php'],
     ['label'=>'Cadastros','link'=>'#','perm'=>'cadastros.view','section'=>'cadastros', 'dropdown'=>[
-        ['label'=>'Clientes','link'=>'cadastros/clientes.php','perm'=>'cadastros.view','section'=>'clientes.php'],
-        ['label'=>'Produtos','link'=>'cadastros/produtos.php','perm'=>'cadastros.view','section'=>'produtos.php'],
+        ['label'=>'Clientes','link'=>'clientes.php','perm'=>'cadastros.view','section'=>'clientes.php'],
+        ['label'=>'Produtos','link'=>'produtos.php','perm'=>'cadastros.view','section'=>'produtos.php'],
     ]],
     ['label'=>'Cardápio','link'=>'cardapio.php','perm'=>'cardapio.view','section'=>'cardapio.php'],
     ['label'=>'Estações','link'=>'estacoes.php','perm'=>'estacoes.view','section'=>'estacoes.php'],
     ['label'=>'Estoque','link'=>'estoque.php','perm'=>'estoque.view','section'=>'estoque.php'],
+    ['label'=>'Recompras','link'=>'recompras.php','perm'=>'reorders.view','section'=>'reorders.php'],
     ['label'=>'Faturamento','link'=>'faturamento.php','perm'=>'faturamento.view','section'=>'faturamento.php'],
     ['label'=>'Relatórios','link'=>'relatorios.php','perm'=>'relatorios.view','section'=>'relatorios.php'],
     ['label'=>'Caixa','link'=>'caixa.php','perm'=>'caixa.view','section'=>'caixa.php'],
