@@ -13,13 +13,6 @@ $phar = new Phar($pharFile);
 //adiciona todos os arquivos .php da pasta php/classes/
 $phar->buildFromDirectory(__DIR__ . '/php/classes', '/\.php$/');
 
-//define o stub (o código inicial que o .phar executa)
-// $stub = <<<'STUB'
-// <?php
-// Phar::mapPhar('classes.phar');
-// require 'phar://classes.phar/autoload.php';
-// __HALT_COMPILER();
-// STUB;
 $stub = <<<'STUB'
 <?php
 Phar::mapPhar();
@@ -30,12 +23,6 @@ STUB;
 $phar->setStub($stub);
 
 // FALLBACK adiciona um autoloader simples dentro do phar
-// $autoload = "<?php\n";
-// $autoload .= "spl_autoload_register(function(\$class) {\n";
-// $autoload .= "    \$file = 'phar://classes.phar/' . basename(str_replace('\\\\', '/', \$class)) . '.php';\n";
-// $autoload .= "    if (file_exists(\$file)) require \$file;\n";
-// $autoload .= "});\n";
-// $phar->addFromString('autoload.php', $autoload);
 $autoload = "<?php\n";
 $autoload .= "spl_autoload_register(function(\$class) {\n";
 $autoload .= "    \$file = 'phar://' . basename(__FILE__) . '/' . basename(str_replace('\\\\', '/', \$class)) . '.php';\n";
