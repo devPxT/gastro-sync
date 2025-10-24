@@ -88,3 +88,4 @@
 [info] Notificando Garçom João: pedido #8 agora está 'preparing' {"order_id":"8","waiter":"Garçom João"}
 [info] Ingrediente atualizado: Laranja (un) {"ingredient_id":4}
 [info] Reorder removido (id=3) {"reorder_id":3}
+[info] Usuário logou: caixa {"user_id":2}

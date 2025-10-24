@@ -1,36 +1,46 @@
 <?php
 // build-phar.php
-// Gera um arquivo .phar contendo todas as classes em php/classes/
-
-$pharFile = __DIR__ . '/classes.phar';
+$pharFile = __DIR__ . '/php/packages/classes.phar';
 
 // Apaga se já existir
 if (file_exists($pharFile)) {
-    unlink($pharFile);
+    unlink($pharFile); //apaga se já existir
 }
 
-// Cria o Phar
+//cria o arquivo
 $phar = new Phar($pharFile);
 
-// Adiciona todos os arquivos .php da pasta php/classes/
+//adiciona todos os arquivos .php da pasta php/classes/
 $phar->buildFromDirectory(__DIR__ . '/php/classes', '/\.php$/');
 
-// Define o stub (o código inicial que o .phar executa)
+//define o stub (o código inicial que o .phar executa)
+// $stub = <<<'STUB'
+// <?php
+// Phar::mapPhar('classes.phar');
+// require 'phar://classes.phar/autoload.php';
+// __HALT_COMPILER();
+// STUB;
 $stub = <<<'STUB'
 <?php
-Phar::mapPhar('classes.phar');
-require 'phar://classes.phar/autoload.php';
+Phar::mapPhar();
+require 'phar://' . basename(__FILE__) . '/autoload.php';
 __HALT_COMPILER();
 STUB;
 
 $phar->setStub($stub);
 
-// Opcional: adiciona um autoloader simples dentro do phar
+// FALLBACK adiciona um autoloader simples dentro do phar
+// $autoload = "<?php\n";
+// $autoload .= "spl_autoload_register(function(\$class) {\n";
+// $autoload .= "    \$file = 'phar://classes.phar/' . basename(str_replace('\\\\', '/', \$class)) . '.php';\n";
+// $autoload .= "    if (file_exists(\$file)) require \$file;\n";
+// $autoload .= "});\n";
+// $phar->addFromString('autoload.php', $autoload);
 $autoload = "<?php\n";
 $autoload .= "spl_autoload_register(function(\$class) {\n";
-$autoload .= "    \$file = 'phar://classes.phar/' . basename(str_replace('\\\\', '/', \$class)) . '.php';\n";
+$autoload .= "    \$file = 'phar://' . basename(__FILE__) . '/' . basename(str_replace('\\\\', '/', \$class)) . '.php';\n";
 $autoload .= "    if (file_exists(\$file)) require \$file;\n";
 $autoload .= "});\n";
 $phar->addFromString('autoload.php', $autoload);
 
-echo "✅ Arquivo 'classes.phar' criado com sucesso!\n";
+echo "Arquivo 'classes.phar' criado com sucesso!\n";
